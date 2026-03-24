@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Orbitron", sans-serif;
+  --font-body: "Rajdhani", sans-serif;
+  --color-neon-cyan: #00F5FF;
+  --color-neon-purple: #BF00FF;
+  --color-neon-green: #00FF88;
+  --color-neon-orange: #FF6B00;
+  --color-neon-red: #FF2D55;
+  --color-bg-deep: #050508;
+  --color-bg-card: #0D0D14;
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    25% { transform: translateY(-10px) translateX(5px); }
+    50% { transform: translateY(5px) translateX(-10px); }
+    75% { transform: translateY(-5px) translateX(10px); }
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.5; filter: blur(40px); }
+    50% { opacity: 0.8; filter: blur(60px); }
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-bg-deep text-white font-body selection:bg-neon-cyan/30 selection:text-white;
+    background-image: 
+      radial-gradient(circle at 20% 20%, rgba(0, 245, 255, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(191, 0, 255, 0.05) 0%, transparent 40%);
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  .animate-float {
+    animation: float 8s ease-in-out infinite;
+  }
+  .animate-pulse-glow {
+    animation: pulse-glow 4s ease-in-out infinite;
+  }
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-bg-deep;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-neon-cyan/20 rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-neon-cyan/40;
+}

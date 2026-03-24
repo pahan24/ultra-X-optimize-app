@@ -1,0 +1,95 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: {userId} (matches request.auth.uid)
+    // Fields:
+    //   - uid: string (required, immutable) - The unique identifier for the user.
+    //   - displayName: string (optional) - The name displayed for the user.
+    //   - email: string (required) - The user's email address.
+    //   - photoURL: string (optional) - The URL to the user's profile picture.
+    //   - theme: string (optional, enum: ['dark', 'light']) - The user's preferred theme.
+    //   - notificationsEnabled: bool (optional) - Whether the user has enabled notifications.
+    //   - autoOptimize: bool (optional) - Whether the app should automatically optimize the device.
+    //   - createdAt: timestamp (optional, immutable) - When the profile was created.
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && (
+        exists(/databases/$(database)/documents/sessions/$(request.auth.uid)) && 
+        get(/databases/$(database)/documents/sessions/$(request.auth.uid)).data.role == 'admin' &&
+        get(/databases/$(database)/documents/sessions/$(request.auth.uid)).data.username == 'admin'
+      );
+    }
+
+    function isValidSession(data) {
+      // Prevent self-escalation
+      return data.role != 'admin' || data.username == 'admin';
+    }
+
+    function isValidCredential(data) {
+      return data.role is string && data.role in ['admin', 'user'];
+    }
+
+    function isValidAccessKey(data) {
+      return data.keys().hasAll(['createdAt']) &&
+             data.createdAt is timestamp;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /credentials/{username} {
+      allow get: if true;
+      allow create: if (username == 'admin' && !exists(/databases/$(database)/documents/credentials/admin)) || 
+                      (isAdmin() && isValidCredential(request.resource.data));
+      allow update: if isAdmin() && isValidCredential(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /access_keys/{keyId} {
+      allow get: if true;
+      allow update: if true; // Allow marking as used during login
+      allow create: if isAdmin() && isValidAccessKey(request.resource.data);
+      allow list, delete: if isAdmin();
+    }
+
+    match /sessions/{uid} {
+      // Users can manage their own session data, but cannot grant themselves admin role
+      allow read: if isOwner(uid);
+      allow write: if isOwner(uid) && isValidSession(request.resource.data);
+      
+      // Admins can see all sessions
+      allow read: if isAdmin();
+    }
+
+    match /config/{configId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+  }
+}

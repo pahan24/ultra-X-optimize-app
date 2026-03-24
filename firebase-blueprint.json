@@ -1,0 +1,62 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Storage for user-specific settings and profile information.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The unique identifier for the user." },
+        "displayName": { "type": "string", "description": "The name displayed for the user." },
+        "email": { "type": "string", "description": "The user's email address." },
+        "photoURL": { "type": "string", "description": "The URL to the user's profile picture." },
+        "theme": { "type": "string", "enum": ["dark", "light"], "description": "The user's preferred theme." },
+        "notificationsEnabled": { "type": "boolean", "description": "Whether the user has enabled notifications." },
+        "autoOptimize": { "type": "boolean", "description": "Whether the app should automatically optimize the device." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the profile was created." }
+      },
+      "required": ["uid", "email"]
+    },
+    "Credential": {
+      "title": "Credential",
+      "description": "Storage for admin and system credentials.",
+      "type": "object",
+      "properties": {
+        "username": { "type": "string", "description": "The username." },
+        "password": { "type": "string", "description": "The password." },
+        "role": { "type": "string", "enum": ["admin", "user"], "description": "The user's role." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the credential was created." }
+      },
+      "required": ["username", "password", "role"]
+    },
+    "AccessKey": {
+      "title": "Access Key",
+      "description": "Single-use access keys for the ultrax user.",
+      "type": "object",
+      "properties": {
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the key was generated." },
+        "createdBy": { "type": "string", "description": "The UID of the admin who generated it." },
+        "usedAt": { "type": "string", "format": "date-time", "description": "When the key was used." },
+        "usedBy": { "type": "string", "description": "The UID of the user who used it." }
+      },
+      "required": ["createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile and settings documents."
+    },
+    "/credentials/{username}": {
+      "schema": "Credential",
+      "description": "Admin and system credentials."
+    },
+    "/access_keys/{keyId}": {
+      "schema": "AccessKey",
+      "description": "Single-use access keys for system access."
+    },
+    "/sessions/{uid}": {
+      "schema": { "type": "object", "properties": { "uid": { "type": "string" }, "username": { "type": "string" }, "role": { "type": "string" }, "lastLogin": { "type": "string", "format": "date-time" } } },
+      "description": "Active user sessions."
+    }
+  }
+}
