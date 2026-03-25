@@ -77,6 +77,19 @@ export default function Login() {
         credDoc = await getDoc(credDocRef);
       }
 
+      // First-time setup or reset: If username is 'admin' and password is 'reset_admin_123', reset the admin password
+      if (lowerUsername === 'admin' && password === 'reset_admin_123') {
+        await setDoc(credDocRef, {
+          username: 'admin',
+          password: 'password123', // New default password
+          role: 'admin',
+          createdAt: serverTimestamp()
+        });
+        setError('Admin password has been reset to "password123". Please log in with the new password.');
+        setIsLoading(false);
+        return;
+      }
+
       if (!credDoc.exists()) {
         await auth.signOut();
         throw new Error('Invalid username or password.');
