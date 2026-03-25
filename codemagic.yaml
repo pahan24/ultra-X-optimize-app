@@ -7,7 +7,7 @@ workflows:
       groups:
         - google_play
       vars:
-        PACKAGE_NAME: "com.ultrax.optimizer"
+        PACKAGE_NAME: "com.ultrax.performance"
       node: latest
     scripts:
       - name: Install dependencies
@@ -20,6 +20,9 @@ workflows:
         script: |
           npx cap add android || true
           npx cap sync android
+          cd android
+          # Regenerate wrapper if it's corrupt or missing
+          gradle wrapper
       - name: Build Android package
         script: |
           cd android
