@@ -9,6 +9,7 @@ workflows:
       vars:
         PACKAGE_NAME: "com.ultrax.performance"
       node: latest
+      java: 21
     scripts:
       - name: Install dependencies
         script: |
