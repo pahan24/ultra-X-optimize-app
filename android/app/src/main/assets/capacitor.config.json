@@ -1,0 +1,8 @@
+{
+	"appId": "com.ultrax.performance",
+	"appName": "Ultra X Performance Engine",
+	"webDir": "dist",
+	"server": {
+		"androidScheme": "https"
+	}
+}

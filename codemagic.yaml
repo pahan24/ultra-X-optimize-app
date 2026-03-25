@@ -16,12 +16,15 @@ workflows:
       - name: Build web app
         script: |
           npm run build
+      - name: Initialize Capacitor Android
+        script: |
+          npx cap add android || true
+          npx cap sync android
       - name: Build Android package
         script: |
-          # In a real scenario, you would use Capacitor or similar
-          # For now, we simulate the Android build by packaging the web build
-          mkdir -p android/app/build/outputs/apk/release
-          cd dist && zip -r ../android/app/build/outputs/apk/release/app-release.apk .
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleRelease
     artifacts:
       - android/app/build/outputs/apk/release/*.apk
     publishing:

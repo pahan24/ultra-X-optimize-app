@@ -28,6 +28,7 @@ import BackupStatus from './fragments/BackupStatus';
 import EventViewer from './fragments/EventViewer';
 import ResourceMonitor from './fragments/ResourceMonitor';
 import TaskScheduler from './fragments/TaskScheduler';
+import NetworkSpeed from './fragments/NetworkSpeed';
 import Login from './fragments/Login';
 import Settings from './fragments/Settings';
 import { FragmentType } from './types';
@@ -121,6 +122,8 @@ export default function App() {
         return <ResourceMonitor onBack={() => setActiveFragment('dashboard')} />;
       case 'scheduler':
         return <TaskScheduler onBack={() => setActiveFragment('dashboard')} />;
+      case 'networkspeed':
+        return <NetworkSpeed onBack={() => setActiveFragment('dashboard')} />;
       case 'settings':
         return <Settings onBack={() => setActiveFragment('dashboard')} userRole={userRole} />;
       default:

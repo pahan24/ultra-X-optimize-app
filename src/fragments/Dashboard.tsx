@@ -368,6 +368,7 @@ export default function Dashboard({ onNavigate }: { onNavigate: (fragment: strin
             { icon: Moon, label: 'App Hibernation', desc: 'Stop background power drain', color: 'purple', target: 'hibernation' },
             { icon: Lock, label: 'Privacy Guard', desc: 'Audit app permissions', color: 'cyan', target: 'privacy' },
             { icon: Wifi, label: 'Network Boost', desc: 'Optimize connection speed', color: 'green', target: 'network' },
+            { icon: Gauge, label: 'Speed Test', desc: 'Check network speed', color: 'cyan', target: 'networkspeed' },
           ].map((item, i) => (
             <motion.div 
               key={item.label}

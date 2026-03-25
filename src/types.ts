@@ -1,4 +1,4 @@
-export type FragmentType = 'dashboard' | 'junk' | 'ram' | 'battery' | 'cpu' | 'storage' | 'apps' | 'game' | 'security' | 'network' | 'hibernation' | 'privacy' | 'settings' | 'sysinfo' | 'duplicate' | 'startup' | 'browser' | 'driver' | 'registry' | 'uninstaller' | 'shredder' | 'diskhealth' | 'vpn' | 'parental' | 'backup' | 'eventviewer' | 'resourcemonitor' | 'scheduler';
+export type FragmentType = 'dashboard' | 'junk' | 'ram' | 'battery' | 'cpu' | 'storage' | 'apps' | 'game' | 'security' | 'network' | 'hibernation' | 'privacy' | 'settings' | 'sysinfo' | 'duplicate' | 'startup' | 'browser' | 'driver' | 'registry' | 'uninstaller' | 'shredder' | 'diskhealth' | 'vpn' | 'parental' | 'backup' | 'eventviewer' | 'resourcemonitor' | 'scheduler' | 'networkspeed';
 
 export interface AppInfo {
   id: string;

@@ -97,7 +97,7 @@ export function NeonButton({ children, onClick, className, variant = 'cyan', dis
   );
 }
 
-export function CircularGauge({ value, size = 180, strokeWidth = 8, color = '#00F5FF', label }: { value: number, size?: number, strokeWidth?: number, color?: string, label?: string }) {
+export function CircularGauge({ value, size = 180, strokeWidth = 8, color = '#00F5FF', label, unit }: { value: number, size?: number, strokeWidth?: number, color?: string, label?: string, unit?: string }) {
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const offset = circumference - (value / 100) * circumference;
@@ -127,7 +127,10 @@ export function CircularGauge({ value, size = 180, strokeWidth = 8, color = '#00
         />
       </svg>
       <div className="absolute flex flex-col items-center justify-center">
-        <span className="text-4xl font-display font-bold" style={{ color }}>{Math.round(value)}</span>
+        <div className="flex items-baseline gap-1">
+          <span className="text-4xl font-display font-bold" style={{ color }}>{Math.round(value)}</span>
+          {unit && <span className="text-xs font-bold text-white/40 uppercase tracking-widest">{unit}</span>}
+        </div>
         {label && <span className="text-[10px] uppercase tracking-widest text-white/50">{label}</span>}
       </div>
     </div>
