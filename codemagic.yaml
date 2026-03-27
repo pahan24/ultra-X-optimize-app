@@ -28,6 +28,7 @@ workflows:
         script: |
           cd android
           chmod +x gradlew
+          # Build a signed release APK (using debug keys for now)
           ./gradlew assembleRelease
     artifacts:
       - android/app/build/outputs/apk/release/*.apk
